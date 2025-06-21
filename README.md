@@ -1,6 +1,6 @@
 This is a blog repo to follow with my homelab and coding project
 
-## 2025-06-19
+## 2025-06-18
 Discovered nginx proxy manager. Ran it over in a docker container and was able to create a self signed certificate towards cloudglare.
 The solution is incredible because I can not remove the security warning from all my homelab services. 
 ## 2025-06-20
