@@ -12,3 +12,4 @@ http:
     trusted_proxies:
     - x.x.x.x/24
 ```
+Successfully added all the 30+ services and had an issue with the hp printer web services. The printer web portal seems to need a specific configuration to forward to a proxy. Will probably deal with it another time.
