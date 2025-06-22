@@ -26,3 +26,5 @@ Troubleshooting build errors with a newly created github workflow. This is my fi
 
 ![alt text](image-1.png)
 
+Reading about dotnet action issue seems to have been patched in 2022 https://github.com/actions/setup-dotnet. They introduced an env variable DOTNET_INSTALL_DIR: /home/[targetUser]/.dotnet to set if the action user does not have root permissions. This fixed my issue.
+
