@@ -28,3 +28,6 @@ Troubleshooting build errors with a newly created github workflow. This is my fi
 
 Reading about dotnet action issue seems to have been patched in 2022 https://github.com/actions/setup-dotnet. They introduced an env variable DOTNET_INSTALL_DIR: /home/[targetUser]/.dotnet to set if the action user does not have root permissions. This fixed my issue.
 
+## 2025-06-21
+###Docker dockerfile
+Successfully built the first image using github actions and dockerfile. The docker file gave me many errors that had to be troubleshooted during many trial and errors. I had to maybe try 20 different commits for the first image to be created. My next step would be determine if building the project is better suited inside a dockerfile or a github action. Another next step would be to push the images to the docker local registry.
