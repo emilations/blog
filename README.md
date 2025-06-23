@@ -31,3 +31,7 @@ Reading about dotnet action issue seems to have been patched in 2022 https://git
 ## 2025-06-21
 ### Dockerfile
 Successfully built the first image using github actions and dockerfile. The docker file gave me many errors that had to be troubleshooted during many trial and errors. I had to maybe try 20 different commits for the first image to be created. My next step would be determine if building the project is better suited inside a dockerfile or a github action. Another next step would be to push the images to the docker local registry.
+
+## 2025-06-23
+### C#
+Created two projects in a solution called sigma. The solution is mostly to help me practice creating C# projects from scratch instead of maintaining one already build and setup. The solution carries two projects for now, one called sigma-database, and one called sigma-api. The database one is a code first db that defines the db context. And the api one is where the REST controllers are located. I came across an issue with my VPN today while coding at a coffee shop. My sql server is hosted on my servers with a dns record dev.blue.paraluno.com and this record is used to define the projects connection strings. Meaning, that although my vpn is instructed to use my internal DNS, the DNS is not resolving. Will probably take the occasion to set up a new openvpn server since the one I have is depreciated.
