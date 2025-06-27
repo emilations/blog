@@ -35,3 +35,9 @@ Successfully built the first image using github actions and dockerfile. The dock
 ## 2025-06-23
 ### C#
 Created two projects in a solution called sigma. The solution is mostly to help me practice creating C# projects from scratch instead of maintaining one already build and setup. The solution carries two projects for now, one called sigma-database, and one called sigma-api. The database one is a code first db that defines the db context. And the api one is where the REST controllers are located. I came across an issue with my VPN today while coding at a coffee shop. My sql server is hosted on my servers with a dns record dev.blue.paraluno.com and this record is used to define the projects connection strings. Meaning, that although my vpn is instructed to use my internal DNS, the DNS is not resolving. Will probably take the occasion to set up a new openvpn server since the one I have is depreciated.
+
+## 2025-06-26
+### homepage dashboard
+Updating most visited services to use the new xxxx.blue.paraluno.com address. Changes are only under the hood in order to no longer redirect to a hard coded ip address.
+![image](https://github.com/user-attachments/assets/73e23b59-d8cc-4706-9d2e-e547d9fb7244)
+
