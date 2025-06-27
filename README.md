@@ -39,5 +39,5 @@ Created two projects in a solution called sigma. The solution is mostly to help 
 ## 2025-06-26
 ### homepage dashboard
 Updating most visited services to use the new xxxx.blue.paraluno.com address. Changes are only under the hood in order to no longer redirect to a hard coded ip address.
-![image](https://github.com/user-attachments/assets/73e23b59-d8cc-4706-9d2e-e547d9fb7244)
+![image](https://github.com/user-attachments/assets/f95d76e5-ca98-40b6-a93e-b03dca5e3ad8)
 
