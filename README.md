@@ -37,7 +37,11 @@ Successfully built the first image using github actions and dockerfile. The dock
 Created two projects in a solution called sigma. The solution is mostly to help me practice creating C# projects from scratch instead of maintaining one already build and setup. The solution carries two projects for now, one called sigma-database, and one called sigma-api. The database one is a code first db that defines the db context. And the api one is where the REST controllers are located. I came across an issue with my VPN today while coding at a coffee shop. My sql server is hosted on my servers with a dns record dev.blue.paraluno.com and this record is used to define the projects connection strings. Meaning, that although my vpn is instructed to use my internal DNS, the DNS is not resolving. Will probably take the occasion to set up a new openvpn server since the one I have is depreciated.
 
 ## 2025-06-26
-### homepage dashboard
+### Homepage dashboard
 Updating most visited services to use the new xxxx.blue.paraluno.com address. Changes are only under the hood in order to no longer redirect to a hard coded ip address.
 ![image](https://github.com/user-attachments/assets/f95d76e5-ca98-40b6-a93e-b03dca5e3ad8)
 
+## 2025-06-29
+### TrueNas NAS
+The TrueNas server sent me a message in the morning saying there is a disk returning critical errors. After loging in to TrueNas dashboard, I see that the scheduled SMART test I set long time ago was failing for a particular disk. The UI however does not seem to give any more information about error details. So I had to run the `smartctl` command directly on the shell and checkout the SMART values. There seems to be a 16 unrecoverable sectors. Running a long self test again reveals the same thing. I take note of the disk SN and then swap its cable to troubleshoot. However, the disk continues to fail which is logical since the unrecoverable erros are mostly handeled by the drive controller and not affected by the cable. Unfortunetly, the drive is 3.5 years old and out of warranty. All of the current drives in the pools are Seagate and this is the second one failing since building the server. Thus, I am reflecting on the idea to replace the drive with Western Digital equivalence to probably offset of a design issue. I will propably plug the defective drive into a Windows VM and troubleshoot it further with the seagate software.
+![alt text](image-2.png)
