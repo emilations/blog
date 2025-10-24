@@ -76,4 +76,15 @@ I have a remote server at a buddy that has been kernel panicking for the last 12
 
 Fast forward to a couple of weeks later, I get a hold of the remote server and start testing. Memtest+ running after 3 days did not reveal any errors. The disk smart values also did not reveal any errors. I spent a week looking at logs and setting up a kernel panic dump with no avail. I just could not reproduce the freeze once the server was at my home. The only time I was able to reproduce it is by physically wiggling the SODIMMs, but that discovery was not conclusive. I also couldnt find any operating system file system corruptions. Left with no other choice, I reinstalled proxmox and restored the virtual machines and started testing again. Reading online, I am led to believe that the issue might be related C-states, and how disabling it in the BIOS cures the issue. I decided to leave this option as last resort and continue monitoring the server's. After a week of no issues, I decided to deploy the server in service and hope for the best.
 
-### Linux laptop troubleshooting
+## 2025-10-23
+### New zigbee homeassistant antenna and thermostat
+I have been contemplating getting a smart thermostat for a while now. I already have a [home assistant](https://www.home-assistant.io/) installed as a service, but I only have wifi capabilities to connect iot devices. And through my research, a lot of experts seems to not recommend using wifi for iot devices because they are unstable.Lots of time devices on the edge of conectivity drop connection and require manual intervention. So instead, among their recommendations is using the zigbee protocol. It uses the same 2.4ghz band as wifi, but does not transmit internet access and can have devices relay the connections and act as mesh devices to make it easier for edge devices to maintain connection. The zigbee antenna I chose is the [slzb-06](https://smlight.tech/product/slzb-06) model. Its installation was rather easy, I had the option to add the antenna as either as a Zigbee2MQTT integration, or as home assistant zigbee integration. I chose the latter because it seemed more straight forward with less setup. The mqtt one requires a broker setup and a translation layer.
+
+Now for the thermostat, I went with none other than the [sinope model](https://www.sinopetech.com/en/products/zigbee-thermostat-electric-baseboard?variant=41612543098966)
+<div align="center">
+  <img src="image-3.png" alt="alt text" width="600">
+</div>
+It's controls and sensors easily integrates via the zigbee connection to home assistant. I was surprised how easy it was to just set the temperature via one control tag. I was able to create an automation to set a warm temperature in bedroom to help me wake up in the morning. The control also monitors the power being drawn, and I smell another project comming "power monitoring".
+<div align="center">
+  <img src="image-4.png" alt="alt text" width="600">
+</div>
