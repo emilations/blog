@@ -95,3 +95,7 @@ It's controls and sensors easily integrates via the zigbee connection to home as
 <div align="center">
   <img src="image-4.png" alt="alt text" width="600">
 </div>
+
+## 2025-10-24
+### Configured the first gitea runner
+I run a local devops [platform](https://about.gitea.com/). And I upload all sensitive repos containing configs and what not to it. Gitea is a replacement to github and has the functionality of runners. I have a repo containing all the docker-compose.yaml files and want a runner to be able to check if a compose is changed and then push it to the docker server. So my first step today was to install and setup a gitea action runner. I was able to follow these [instructions](https://docs.gitea.com/usage/actions/act-runner#start-the-runner-using-docker-compose) and create a container runner. Next step would be to create an action or workflow and I heard It close enough to github actions.
