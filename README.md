@@ -37,7 +37,7 @@ Successfully built the first image using github actions and dockerfile. The dock
 Created two projects in a solution called sigma. The solution is mostly to help me practice creating C# projects from scratch instead of maintaining one already build and setup. The solution carries two projects for now, one called sigma-database, and one called sigma-api. The database one is a code first db that defines the db context. And the api one is where the REST controllers are located. I came across an issue with my VPN today while coding at a coffee shop. My sql server is hosted on my servers with a dns record dev.blue.paraluno.com and this record is used to define the projects connection strings. Meaning, that although my vpn is instructed to use my internal DNS, the DNS is not resolving. Will probably take the occasion to set up a new openvpn server since the one I have is depreciated.
 
 ## 2025-06-26
-### Homepage dashboard
+## Homepage dashboard <a name="homepage-dashboard"></a>
 Updating most visited services to use the new xxxx.blue.paraluno.com address. Changes are only under the hood in order to no longer redirect to a hard coded ip address.
 ![image](https://github.com/user-attachments/assets/f95d76e5-ca98-40b6-a93e-b03dca5e3ad8)
 
@@ -66,6 +66,10 @@ One of the things I miss the most about Synology NAS is how easy it was to setup
     - Dataset Child (user scanner Modify permission)
 
 User scanner will only be able to see the contents of Dataset Child.
+
+## 2025-10-05
+### Docker compose files repo
+
 
 ## 2025-10-12
 ### HDD failure
@@ -99,3 +103,50 @@ It's controls and sensors easily integrates via the zigbee connection to home as
 ## 2025-10-24
 ### Configured the first gitea runner
 I run a local devops [platform](https://about.gitea.com/). And I upload all sensitive repos containing configs and what not to it. Gitea is a replacement to github and has the functionality of runners. I have a repo containing all the docker-compose.yaml files and want a runner to be able to check if a compose is changed and then push it to the docker server. So my first step today was to install and setup a gitea action runner. I was able to follow these [instructions](https://docs.gitea.com/usage/actions/act-runner#start-the-runner-using-docker-compose) and create a container runner. Next step would be to create an action or workflow and I heard It close enough to github actions.
+
+## 2025-10-26
+### First gitea workflow
+They say the best actions are those that solve a "pain" you have. And my pain has always been having to ssh into a docker vm, locate a container setting and then docker compose. Having to do all this manual work is discouraging to keeping certain container settings up to do date. Let me give you an example. The [Homepage Dashboard](#homepage-dashboard) does not have an admin ui to configure the layour and services. Instead, it requires a direct modification of a file mapped to the container. Meaning that everytime I have a modification to make, I need to ssh in to the VM hosting the container and then find the file. Its 
+tedious and a pain. 
+
+Here comes my first gitea action, 
+
+```
+name: Update homepage
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - "main"
+
+env:
+  BUILDKIT_NO_CLIENT_TOKEN: 1
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Copy settings to remote
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          scp -r -o StrictHostKeyChecking=no -i private_key.pem homepage/services.yaml homepage/widget.yaml dexter@192.168.3.4:/home/dexter/homepage/config
+
+      - name: Cleanup
+        run: rm -f private_key.pem
+```
+
+The action leverages a secret I set in gitea containing the private key in order to successfully login to the VM. I was surprised how similar the syntax was to github actions. This action now triggers when I commit new changes to the repo containing a copy of the settings I want. Two months ago, I did an overhaul of all my containers compose files and now have them in a repo in gitea instead of just a local copy where docker exists. This repo now contains many configuration files to other containers, but for now I am only automating the update of the homepage container. Many many cool automation projects will definetly follow.
+
