@@ -77,3 +77,11 @@ I have a remote server at a buddy that has been kernel panicking for the last 12
 Fast forward to a couple of weeks later, I get a hold of the remote server and start testing. Memtest+ running after 3 days did not reveal any errors. The disk smart values also did not reveal any errors. I spent a week looking at logs and setting up a kernel panic dump with no avail. I just could not reproduce the freeze once the server was at my home. The only time I was able to reproduce it is by physically wiggling the SODIMMs, but that discovery was not conclusive. I also couldnt find any operating system file system corruptions. Left with no other choice, I reinstalled proxmox and restored the virtual machines and started testing again. Reading online, I am led to believe that the issue might be related C-states, and how disabling it in the BIOS cures the issue. I decided to leave this option as last resort and continue monitoring the server's. After a week of no issues, I decided to deploy the server in service and hope for the best.
 
 ### Linux laptop troubleshooting
+
+### Hardware upgrades
+I have two main hypervisors in my server rack, one that hosts the firewall and all the services required to run the home network. And another hypervisory that host everything else that wont bring the house down if its off for maintenance. However, I have been meaning to add a third machine in order to properly create a cluster. Proxmox recommends at least three nodes for cluster to keep a safe quorum. So I have been looking for an SFF used computer that will allow me to eventually add a 10g nic. A model that is interesting is the Lenovo Thinkcenter P340 SFF. The spec that I am most looking into is ECC ram. I have been wanting to slowly replace old servers with ECC compatible for a peace of mind.
+
+There also another scenario I have been considering. I am soon changing address to a new place. And I have been considering moving the server rack to a remote location in order to make some space at the new place. An ideal location would be my parents house. This will require me to have an edge pc hosting a firewall to connect the two sites together. It would be like having my own cloud services. However, I am afraid it will also introduce a lot of complexity.
+
+
+<img width="1500" height="1340" alt="image" src="image-3.jpeg" />
