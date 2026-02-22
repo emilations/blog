@@ -157,4 +157,4 @@ I have two main hypervisors in my server rack, one that hosts the firewall and a
 There also another scenario I have been considering. I am soon changing address to a new place. And I have been considering moving the server rack to a remote location in order to make some space at the new place. An ideal location would be my parents house. This will require me to have an edge pc hosting a firewall to connect the two sites together. It would be like having my own cloud services. However, I am afraid it will also introduce a lot of complexity.
 
 
-<img width="1500" height="1340" alt="image" src="image-3.jpeg" />
+<img width="1500" height="1340" alt="image" src="image-6.jpeg" />
