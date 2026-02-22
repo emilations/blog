@@ -37,7 +37,7 @@ Successfully built the first image using github actions and dockerfile. The dock
 Created two projects in a solution called sigma. The solution is mostly to help me practice creating C# projects from scratch instead of maintaining one already build and setup. The solution carries two projects for now, one called sigma-database, and one called sigma-api. The database one is a code first db that defines the db context. And the api one is where the REST controllers are located. I came across an issue with my VPN today while coding at a coffee shop. My sql server is hosted on my servers with a dns record dev.blue.paraluno.com and this record is used to define the projects connection strings. Meaning, that although my vpn is instructed to use my internal DNS, the DNS is not resolving. Will probably take the occasion to set up a new openvpn server since the one I have is depreciated.
 
 ## 2025-06-26
-### Homepage dashboard
+## Homepage dashboard <a name="homepage-dashboard"></a>
 Updating most visited services to use the new xxxx.blue.paraluno.com address. Changes are only under the hood in order to no longer redirect to a hard coded ip address.
 ![image](https://github.com/user-attachments/assets/f95d76e5-ca98-40b6-a93e-b03dca5e3ad8)
 
@@ -67,6 +67,10 @@ One of the things I miss the most about Synology NAS is how easy it was to setup
 
 User scanner will only be able to see the contents of Dataset Child.
 
+## 2025-10-05
+### Docker compose files repo
+
+
 ## 2025-10-12
 ### HDD failure
 I had another hdd failure from seagate. This is the third failure in a spam of three years. Following this failure, I had decided to stock replacement disk for all the remaining seagate drives. I had three left, so I had to source three WD 4tb drives of the same models before they phase out the model. Fortunately, I was able to find three in stock in different stores around my city. I then proceeded to test out the drives and prep them once a new failure occurs.
@@ -76,7 +80,76 @@ I have a remote server at a buddy that has been kernel panicking for the last 12
 
 Fast forward to a couple of weeks later, I get a hold of the remote server and start testing. Memtest+ running after 3 days did not reveal any errors. The disk smart values also did not reveal any errors. I spent a week looking at logs and setting up a kernel panic dump with no avail. I just could not reproduce the freeze once the server was at my home. The only time I was able to reproduce it is by physically wiggling the SODIMMs, but that discovery was not conclusive. I also couldnt find any operating system file system corruptions. Left with no other choice, I reinstalled proxmox and restored the virtual machines and started testing again. Reading online, I am led to believe that the issue might be related C-states, and how disabling it in the BIOS cures the issue. I decided to leave this option as last resort and continue monitoring the server's. After a week of no issues, I decided to deploy the server in service and hope for the best.
 
-### Linux laptop troubleshooting
+## 2025-10-21
+### Laptop c-frame replacement
+A scissor switch key on my laptop (Thinkpad E16 gen 1) broke and I had to replace the whole c-frame since the keyboard is rivited to the frame. The whole procedure took 30 min and was quite please on how lenovo designed the internal of this laptop. A similar procedure with an xps 9500 would take easily 1 hour and is a much more challending ordeal. I was surprised that lenovo seemed to have had changed the coating on the chassis with a revision. The replacement part has the traditional rubbery coating that we find on the T/P/X1 models. The E and L models are usually the cheaper ones with a glossy plastic finishes.
+<div align="center">
+  <img src="image-5.png" alt="alt text" width="1200">
+</div>
+
+## 2025-10-23
+### New zigbee homeassistant antenna and thermostat
+I have been contemplating getting a smart thermostat for a while now. I already have a [home assistant](https://www.home-assistant.io/) installed as a service, but I only have wifi capabilities to connect iot devices. And through my research, a lot of experts seems to not recommend using wifi for iot devices because they are unstable.Lots of time devices on the edge of conectivity drop connection and require manual intervention. So instead, among their recommendations is using the zigbee protocol. It uses the same 2.4ghz band as wifi, but does not transmit internet access and can have devices relay the connections and act as mesh devices to make it easier for edge devices to maintain connection. The zigbee antenna I chose is the [slzb-06](https://smlight.tech/product/slzb-06) model. Its installation was rather easy, I had the option to add the antenna as either as a Zigbee2MQTT integration, or as home assistant zigbee integration. I chose the latter because it seemed more straight forward with less setup. The mqtt one requires a broker setup and a translation layer.
+
+Now for the thermostat, I went with none other than the [sinope model](https://www.sinopetech.com/en/products/zigbee-thermostat-electric-baseboard?variant=41612543098966)
+<div align="center">
+  <img src="image-3.png" alt="alt text" width="600">
+</div>
+It's controls and sensors easily integrates via the zigbee connection to home assistant. I was surprised how easy it was to just set the temperature via one control tag. I was able to create an automation to set a warm temperature in bedroom to help me wake up in the morning. The control also monitors the power being drawn, and I smell another project comming "power monitoring".
+<div align="center">
+  <img src="image-4.png" alt="alt text" width="600">
+</div>
+
+## 2025-10-24
+### Configured the first gitea runner
+I run a local devops [platform](https://about.gitea.com/). And I upload all sensitive repos containing configs and what not to it. Gitea is a replacement to github and has the functionality of runners. I have a repo containing all the docker-compose.yaml files and want a runner to be able to check if a compose is changed and then push it to the docker server. So my first step today was to install and setup a gitea action runner. I was able to follow these [instructions](https://docs.gitea.com/usage/actions/act-runner#start-the-runner-using-docker-compose) and create a container runner. Next step would be to create an action or workflow and I heard It close enough to github actions.
+
+## 2025-10-26
+### First gitea workflow
+They say the best actions are those that solve a "pain" you have. And my pain has always been having to ssh into a docker vm, locate a container setting and then docker compose. Having to do all this manual work is discouraging to keeping certain container settings up to do date. Let me give you an example. The [Homepage Dashboard](#homepage-dashboard) does not have an admin ui to configure the layour and services. Instead, it requires a direct modification of a file mapped to the container. Meaning that everytime I have a modification to make, I need to ssh in to the VM hosting the container and then find the file. Its 
+tedious and a pain. 
+
+Here comes my first gitea action, 
+
+```
+name: Update homepage
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - "main"
+
+env:
+  BUILDKIT_NO_CLIENT_TOKEN: 1
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Copy settings to remote
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          scp -r -o StrictHostKeyChecking=no -i private_key.pem homepage/services.yaml homepage/widget.yaml dexter@192.168.3.4:/home/dexter/homepage/config
+
+      - name: Cleanup
+        run: rm -f private_key.pem
+```
+
+The action leverages a secret I set in gitea containing the private key in order to successfully login to the VM. I was surprised how similar the syntax was to github actions. This action now triggers when I commit new changes to the repo containing a copy of the settings I want. Two months ago, I did an overhaul of all my containers compose files and now have them in a repo in gitea instead of just a local copy where docker exists. This repo now contains many configuration files to other containers, but for now I am only automating the update of the homepage container. Many many cool automation projects will definetly follow.
+
 
 ### Hardware upgrades
 I have two main hypervisors in my server rack, one that hosts the firewall and all the services required to run the home network. And another hypervisory that host everything else that wont bring the house down if its off for maintenance. However, I have been meaning to add a third machine in order to properly create a cluster. Proxmox recommends at least three nodes for cluster to keep a safe quorum. So I have been looking for an SFF used computer that will allow me to eventually add a 10g nic. A model that is interesting is the Lenovo Thinkcenter P340 SFF. The spec that I am most looking into is ECC ram. I have been wanting to slowly replace old servers with ECC compatible for a peace of mind.
